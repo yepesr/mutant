@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SequencesVerifier.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mutant</a> &gt; <a href="index.source.html" class="el_package">com.ml.mutant.service.impl</a> &gt; <span class="el_source">SequencesVerifier.java</span></div><h1>SequencesVerifier.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.ml.mutant.service.impl;
+
+import java.util.List;
+
+/**
+ *
+ * @author lyepe
+ */
+public class SequencesVerifier {
+
+    private final String[] dna;
+    private final int occurrences;
+    private final List&lt;String&gt; sequences;
+    private int found;
+
+<span class="fc" id="L21">    public SequencesVerifier(String[] dna, int occurrences, List&lt;String&gt; sequences) {</span>
+<span class="fc" id="L22">        this.dna = dna;</span>
+<span class="fc" id="L23">        this.occurrences = occurrences;</span>
+<span class="fc" id="L24">        this.sequences = sequences;</span>
+<span class="fc" id="L25">    }</span>
+
+    public boolean verify() {
+
+<span class="fc" id="L29">        findHorizontalSequence();</span>
+<span class="fc bfc" id="L30" title="All 2 branches covered.">        if (isMutant()) {</span>
+<span class="fc" id="L31">            return true;</span>
+        }
+<span class="fc" id="L33">        findVerticalSequence();</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (isMutant()) {</span>
+<span class="fc" id="L35">            return true;</span>
+        }
+
+<span class="fc" id="L38">        rightDiagonal();</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (isMutant()) {</span>
+<span class="fc" id="L40">            return true;</span>
+        }
+<span class="fc" id="L42">        leftDiagonal();</span>
+
+<span class="fc" id="L44">        return isMutant();</span>
+    }
+
+    private boolean isMutant() {
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        return found &gt;= occurrences;</span>
+    }
+
+    public void countOccurrence(String value, String toFind) {
+<span class="fc" id="L52">        int lastIndex = 0;</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        while (lastIndex != -1) {</span>
+<span class="fc" id="L54">            lastIndex = value.indexOf(toFind, lastIndex);</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            if (lastIndex != -1) {</span>
+<span class="fc" id="L56">                found++;</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">                if (isMutant()) {</span>
+<span class="fc" id="L58">                    return;</span>
+                }
+<span class="fc" id="L60">                lastIndex += toFind.length();</span>
+            }
+        }
+<span class="fc" id="L63">    }</span>
+
+    public void findHorizontalSequence() {
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        for (String value : dna) {</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">            for (String cadena : sequences) {</span>
+<span class="fc" id="L68">                countOccurrence(value, cadena);</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">                if (isMutant()) {</span>
+<span class="fc" id="L70">                    return;</span>
+                }
+<span class="fc" id="L72">            }</span>
+        }
+<span class="fc" id="L74">    }</span>
+
+    public void findVerticalSequence() {
+<span class="fc" id="L77">        StringBuilder sb = new StringBuilder();</span>
+
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (int j = 0; j &lt; dna.length; j++) {</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            for (String dna1 : dna) {</span>
+<span class="fc" id="L81">                sb.append(dna1.substring(j, j + 1));</span>
+            }
+<span class="fc" id="L83">            String value = sb.toString();</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">            for (String cadena : sequences) {</span>
+
+<span class="fc" id="L86">                countOccurrence(value, cadena);</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">                if (isMutant()) {</span>
+<span class="fc" id="L88">                    return;</span>
+                }
+
+<span class="fc" id="L91">            }</span>
+
+<span class="fc" id="L93">            sb = new StringBuilder();</span>
+        }
+<span class="fc" id="L95">    }</span>
+
+    public String diagonal(int x, int y, int factor) {
+<span class="pc bpc" id="L98" title="1 of 8 branches missed.">        if (x + 1 &gt; dna[0].length() || y + factor &gt; dna[0].length() || x + 1 &lt; -1 || y + factor &lt; -1) {</span>
+<span class="fc" id="L99">            return &quot;&quot;;</span>
+        } else {
+<span class="fc" id="L101">            String substring = dna[y].substring(x, x + 1);</span>
+<span class="fc" id="L102">            x += 1;</span>
+<span class="fc" id="L103">            y += factor;</span>
+<span class="fc" id="L104">            return substring.concat(diagonal(x, y, factor));</span>
+        }
+
+    }
+
+    private void rightDiagonal() {
+        String value;
+<span class="fc" id="L111">        int limit = dna.length - 3;</span>
+<span class="fc" id="L112">        int limit2 = dna.length - 4;</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        for (int i = 0; i &lt; limit; i++) {</span>
+<span class="fc" id="L114">            value = diagonal(i, 0, 1);</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">            for (String cadena : sequences) {</span>
+<span class="fc" id="L116">                countOccurrence(value, cadena);</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">                if (isMutant()) {</span>
+<span class="nc" id="L118">                    return;</span>
+                }
+
+<span class="fc" id="L121">            }</span>
+        }
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        for (int i = 0; i &lt; limit2; i++) {</span>
+<span class="fc" id="L124">            value = diagonal(0, i + 1, 1);</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">            for (String cadena : sequences) {</span>
+<span class="fc" id="L126">                countOccurrence(value, cadena);</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                if (isMutant()) {</span>
+<span class="fc" id="L128">                    return;</span>
+                }
+<span class="fc" id="L130">            }</span>
+        }
+<span class="fc" id="L132">    }</span>
+
+    private void leftDiagonal() {
+        String value;
+<span class="fc" id="L136">        int limit = dna.length - 3;</span>
+<span class="fc" id="L137">        int limit2 = dna.length - 4;</span>
+<span class="fc" id="L138">        int factor = -1;</span>
+<span class="fc" id="L139">        int i = dna.length - 1;</span>
+<span class="fc" id="L140">        int count = 0;</span>
+        do {
+<span class="fc" id="L142">            value = diagonal(0, i, factor);</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">            for (String cadena : sequences) {</span>
+<span class="fc" id="L144">                countOccurrence(value, cadena);</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">                if (isMutant()) {</span>
+<span class="fc" id="L146">                    return;</span>
+                }
+<span class="fc" id="L148">            }</span>
+<span class="fc" id="L149">            i = i + factor;</span>
+<span class="fc" id="L150">            count++;</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        } while (count &lt; limit);</span>
+<span class="fc" id="L152">        count = 0;</span>
+        do {
+<span class="fc" id="L154">            value = diagonal(count + 1, dna.length - 1, factor);</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">            for (String cadena : sequences) {</span>
+<span class="fc" id="L156">                countOccurrence(value, cadena);</span>
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">                if (isMutant()) {</span>
+<span class="nc" id="L158">                    return;</span>
+                }
+<span class="fc" id="L160">            }</span>
+<span class="fc" id="L161">            i = i + factor;</span>
+<span class="fc" id="L162">            count++;</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        } while (count &lt; limit2);</span>
+<span class="fc" id="L164">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.7.201606060606</span></div></body></html>

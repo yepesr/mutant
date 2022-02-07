@@ -1,0 +1,13 @@
+com\ml\mutant\service\impl\MutantSerciveImpl.class
+com\ml\mutant\service\impl\SequencesVerifier.class
+com\ml\mutant\repository\MutantResultRepository.class
+com\ml\mutant\model\MutantResquest.class
+com\ml\mutant\MutantApplication.class
+com\ml\mutant\service\impl\MutantResultServiceImpl.class
+com\ml\mutant\Controller\MutantController.class
+com\ml\mutant\CachingConfig.class
+com\ml\mutant\service\MutantService.class
+com\ml\mutant\ExecutorConfig.class
+com\ml\mutant\model\MutantResultModel.class
+com\ml\mutant\model\Stat.class
+com\ml\mutant\service\MutantResultService.class
